@@ -23,12 +23,12 @@ export class VerifyCodeSendResponse {
 }
 
 export class VerifyCodeCheckedResponse {
-  status: string;
+  valid: boolean;
   phone: string;
   message: string;
-  constructor(status: string, phone: string) {
-    this.status = status;
+  constructor(status: boolean, phone: string) {
+    this.valid = status;
     this.phone = phone;
-    this.message = 'Verification passed';
+    this.message = !status ? 'Verify faild' : 'Verify passed';
   }
 }

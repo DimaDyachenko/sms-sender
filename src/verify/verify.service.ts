@@ -34,29 +34,25 @@ export default class VerifyService {
 
   async sendVerifyCode(receiverPhoneNumber: string) {
     const verifyToken = this.configService.get('VERIFICATION_SID');
-
-    return this.twilioClient.verify.v2
-      .services(verifyToken)
-      .verifications.create({ to: receiverPhoneNumber, channel: 'sms' });
+    try {
+      await this.twilioClient.verify.v2
+        .services(verifyToken)
+        .verifications.create({ to: receiverPhoneNumber, channel: 'sms' });
+    } catch (err) {
+      console.log(err);
+      throw new Error(`${err}`);
+    }
   }
 
   async checkVerifyCode(receiverPhoneNumber: string, code: string) {
     const verifyToken = this.configService.get('VERIFICATION_SID');
-    const checkCode = await this.twilioClient.verify.v2
-      .services(verifyToken)
-      .verificationChecks.create({ to: receiverPhoneNumber, code: code });
-
-    console.log(checkCode);
-    return checkCode;
-
-    // this.attemptService.setFreeAttempts(checkCode.accountSid, checkCode.)
-
-    // try {
-    //   const attempts = await this.attemptService.checkFreeAttempts(verifyCode);
-    //   console.log(attempts);
-    //   return attempts;
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      return await this.twilioClient.verify.v2
+        .services(verifyToken)
+        .verificationChecks.create({ to: receiverPhoneNumber, code: code });
+    } catch (err) {
+      console.log(err);
+      throw new Error(`${err}`);
+    }
   }
 }

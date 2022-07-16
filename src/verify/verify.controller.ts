@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import SmsService from './verify.service';
 import {
   VerifyCodeCheckedResponse,
@@ -8,8 +8,10 @@ import { ConfigService } from '@nestjs/config';
 import { Twilio } from 'twilio';
 import { PhoneDTO, VerifyCodeDTO } from './utils/verify-request';
 import AttemptService from './services/attempt.service';
+import { VerifyInterceptor } from './interceptors/verify-interceptor';
 
 @Controller('verify')
+// @UseInterceptors(VerifyInterceptor)
 export default class VerifyController {
   private twilioClient: Twilio;
   constructor(
@@ -25,6 +27,7 @@ export default class VerifyController {
 
   @Post('send')
   async sendVerifyCode(@Body() body: PhoneDTO) {
+    // This 2 calls will allow us to get info about sms
     // const smsDetails = await this.smsService.sendMessage(body.phoneNumber);
     // const checkStatusMessage = await this.twilioClient
     //   .messages(result.sid)
@@ -44,7 +47,7 @@ export default class VerifyController {
     );
 
     return JSON.stringify(
-      new VerifyCodeCheckedResponse('ok', body.phoneNumber),
+      new VerifyCodeCheckedResponse(verifyCode.valid, body.phoneNumber),
     );
   }
 }

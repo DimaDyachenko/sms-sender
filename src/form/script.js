@@ -1,7 +1,6 @@
 const phoneForm = document.getElementById('phone-form');
 const verifyForm = document.getElementById('verify-form');
 const responseText = document.getElementById('response-text');
-// console.log(2, formData);
 
 phoneForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -22,7 +21,6 @@ phoneForm.addEventListener('submit', async (e) => {
     }),
   });
 
-  console.log(response);
   if (response.ok) {
     phoneForm.style.display = 'none';
     verifyForm.style.display = 'block';
@@ -56,9 +54,15 @@ verifyForm.addEventListener('submit', async (e) => {
 
   console.log(check);
 
-  // verifyForm.style.display = 'none';
-  // responseText.style.display = 'block';
+  if (check.valid) {
+    verifyForm.style.display = 'none';
+    responseText.style.display = 'block';
+    const text = check.message;
+    responseText.innerHTML = text;
+  } else {
+    // verifyForm.style.display = 'none';
+    responseText.style.display = 'block';
+    const text = check.message;
+    responseText.innerHTML = text;
+  }
 });
-
-// const text = response.ok ? check.status : response.statusText;
-// responseText.innerHTML = text;
