@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Twilio } from 'twilio';
+import Twilio from 'twilio';
 import AttemptService from './services/attempt.service';
 
 @Injectable()
 export default class VerifyService {
-  private twilioClient: Twilio;
+  private twilioClient;
 
   constructor(
     private readonly configService: ConfigService,
@@ -14,7 +14,7 @@ export default class VerifyService {
     const accountSid = configService.get('TWILIO_ACCOUNT_SID');
     const authToken = configService.get('TWILIO_AUTH_TOKEN');
 
-    this.twilioClient = new Twilio(accountSid, authToken);
+    this.twilioClient = Twilio(accountSid, authToken);
   }
 
   // this method can send sms and check it status
