@@ -9,7 +9,6 @@ phoneForm.addEventListener('submit', async (e) => {
 
   const response = await fetch('http://127.0.0.1:3000/verify/send', {
     credentials: 'same-origin',
-    // redirect: 'follow',
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -20,6 +19,10 @@ phoneForm.addEventListener('submit', async (e) => {
       phoneNumber: phoneNumber,
     }),
   });
+
+  const check = await response.json();
+
+  console.log(check);
 
   if (response.ok) {
     phoneForm.style.display = 'none';

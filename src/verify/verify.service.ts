@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Twilio from 'twilio';
-import AttemptService from './services/attempt.service';
 
 @Injectable()
 export default class VerifyService {
   private twilioClient;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly attemptService: AttemptService,
-  ) {
+  constructor(private readonly configService: ConfigService) {
     const accountSid = configService.get('TWILIO_ACCOUNT_SID');
     const authToken = configService.get('TWILIO_AUTH_TOKEN');
 

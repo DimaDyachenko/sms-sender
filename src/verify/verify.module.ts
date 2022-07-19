@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import VerifyService from './verify.service';
 import VerifyController from './verify.controller';
-import { AttemptModule } from './services/attempt.module';
-import AttemptService from './services/attempt.service';
+import { ThrottlerBehindProxyGuard } from './guards/throttler.guard';
 
 @Module({
-  imports: [HttpModule, AttemptModule],
+  imports: [HttpModule],
   controllers: [VerifyController],
-  providers: [VerifyService, AttemptService],
+  providers: [VerifyService, ThrottlerBehindProxyGuard],
 })
 export class VerifyModule {}
