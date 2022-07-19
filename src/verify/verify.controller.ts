@@ -13,13 +13,13 @@ import {
 import { ConfigService } from '@nestjs/config';
 import Twilio from 'twilio';
 import { PhoneDTO, VerifyCodeDTO } from './utils/verify-request';
-// import AttemptService from './services/attempt.service';
+import { WsThrottlerGuard } from './guards/throttler.guard';
 import { VerifyInterceptor } from './interceptors/verify-interceptor';
-import { ThrottlerBehindProxyGuard } from './guards/throttler.guard';
 
 @Controller('verify')
 export default class VerifyController {
   private twilioClient;
+
   constructor(
     private readonly smsService: SmsService,
     private readonly configService: ConfigService, // private readonly attemptService: AttemptService,
@@ -30,7 +30,7 @@ export default class VerifyController {
   }
 
   @Post('send')
-  @UseGuards(ThrottlerBehindProxyGuard)
+  @UseGuards(WsThrottlerGuard)
   @UseInterceptors(VerifyInterceptor)
   async sendVerifyCode(@Body() body: PhoneDTO) {
     // This 2 calls will allow us to get info about sms
