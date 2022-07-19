@@ -24,10 +24,11 @@ phoneForm.addEventListener('submit', async (e) => {
 
   console.log(check);
 
-  if (response.ok) {
-    phoneForm.style.display = 'none';
-    verifyForm.style.display = 'block';
-  }
+  // if (response.ok) {
+  //   phoneForm.style.display = 'none';
+  //   verifyForm.style.display = 'block';
+  // }
+  responseChecker(check);
 });
 
 verifyForm.addEventListener('submit', async (e) => {
@@ -69,3 +70,20 @@ verifyForm.addEventListener('submit', async (e) => {
     responseText.innerHTML = text;
   }
 });
+
+function responseChecker(response) {
+  const statusCode = response?.statusCode;
+
+  switch (statusCode) {
+    case 429:
+      // verifyForm.style.display = 'none';
+      responseText.style.display = 'block';
+      const text = response.message;
+      responseText.innerHTML = text;
+      return;
+    default:
+      phoneForm.style.display = 'none';
+      verifyForm.style.display = 'block';
+      return;
+  }
+}
