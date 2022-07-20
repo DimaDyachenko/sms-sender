@@ -8,7 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     VerifyModule,
-    ThrottlerModule.forRoot({ ttl: 60, limit: 2 }),
+    ThrottlerModule.forRoot({ ttl: 60, limit: 3 }),
   ],
   providers: [
     {

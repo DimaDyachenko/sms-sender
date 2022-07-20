@@ -13,7 +13,9 @@ export class WsThrottlerGuard extends ThrottlerGuard {
     const ttls = await this.storageService.getRecord(key);
 
     if (ttls.length >= limit) {
-      throw new ThrottlerException(`To many requests from ${ip}`);
+      throw new ThrottlerException(
+        `To many requests from ${client.body.phoneNumber}`,
+      );
     }
 
     return true;

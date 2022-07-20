@@ -1,8 +1,7 @@
-// Here we will catch every new phone number and set rate limit for verify request but have to connect smth like redis
-
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
@@ -33,6 +32,18 @@ export class VerifyInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map(async (data) => {
         try {
+          const response = JSON.parse(data);
+          const phoneNumberDetails = await this.twilioClient.lookups.v1
+            .phoneNumbers(response.phone)
+            .fetch({ type: ['carrier'] });
+
+          if (phoneNumberDetails.carrier.type === 'voip') {
+            throw new HttpException(
+              'Number is invalid please send valid phone number',
+              400,
+            );
+          }
+
           // could be moved to guard and test there
           // const verifySid = this.configService.get('VERIFICATION_SID');
 
@@ -48,18 +59,11 @@ export class VerifyInterceptor implements NestInterceptor {
           //   .services(verifySid)
           //   .rateLimits(createRateLimit.sid)
           //   .buckets.create({ max: 4, interval: 60 });
-          const response = JSON.parse(data);
-          // console.log(response.phone, response);
 
           // this.twilioClient.lookups.v2
           //   .phoneNumbers(response.phone)
           //   .fetch({ fields: 'live_activity' })
           //   .then((phone_number) => console.log(phone_number));
-
-          this.twilioClient.lookups.v1
-            .phoneNumbers(response.phone)
-            .fetch({ type: ['carrier'] })
-            .then((phone_number) => console.log(phone_number));
 
           // this.twilioClient.lookups.v1
           //   .phoneNumbers(response.phone)
@@ -78,7 +82,7 @@ export class VerifyInterceptor implements NestInterceptor {
 
           return { data };
         } catch (err) {
-          throw new Error(` ${err.message}, ${err}`);
+          throw err;
         }
       }),
     );

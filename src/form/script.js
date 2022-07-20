@@ -57,28 +57,35 @@ verifyForm.addEventListener('submit', async (e) => {
   const check = await response.json();
 
   console.log(check);
-
+  let text;
   if (check.valid) {
     verifyForm.style.display = 'none';
     responseText.style.display = 'block';
-    const text = check.message;
+    text = check.message;
     responseText.innerHTML = text;
   } else {
     // verifyForm.style.display = 'none';
     responseText.style.display = 'block';
-    const text = check.message;
+    text = check.message;
     responseText.innerHTML = text;
   }
 });
 
 function responseChecker(response) {
   const statusCode = response?.statusCode;
+  let text;
 
   switch (statusCode) {
+    case 400:
+      // verifyForm.style.display = 'none';
+      responseText.style.display = 'block';
+      text = response.message;
+      responseText.innerHTML = text;
+      return;
     case 429:
       // verifyForm.style.display = 'none';
       responseText.style.display = 'block';
-      const text = response.message;
+      text = response.message;
       responseText.innerHTML = text;
       return;
     default:
