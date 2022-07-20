@@ -9,7 +9,7 @@ export const twilio = registerAs('twilio', () => {
     readFileSync(
       join(
         dirname(fileURLToPath(import.meta.url)),
-        `../../config/${getVariable('APP_PROFILE')}.yml`,
+        `../../config/${getVariable('APP_ENV')}.yml`,
       ),
       'utf8',
     ),
