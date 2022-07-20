@@ -10,24 +10,13 @@ import {
   VerifyCodeCheckedResponse,
   VerifyCodeSendResponse,
 } from './utils/verify-response';
-import { ConfigService } from '@nestjs/config';
-import Twilio from 'twilio';
 import { PhoneDTO, VerifyCodeDTO } from './utils/verify-request';
 import { WsThrottlerGuard } from './guards/throttler.guard';
 import { VerifyInterceptor } from './interceptors/verify-interceptor';
 
 @Controller('verify')
 export default class VerifyController {
-  private twilioClient;
-
-  constructor(
-    private readonly smsService: SmsService,
-    private readonly configService: ConfigService,
-  ) {
-    const accountSid = configService.get('TWILIO_ACCOUNT_SID');
-    const authToken = configService.get('TWILIO_AUTH_TOKEN');
-    this.twilioClient = Twilio(accountSid, authToken);
-  }
+  constructor(private readonly smsService: SmsService) {}
 
   @Post('send')
   @UseGuards(WsThrottlerGuard)

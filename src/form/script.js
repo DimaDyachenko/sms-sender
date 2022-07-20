@@ -24,10 +24,6 @@ phoneForm.addEventListener('submit', async (e) => {
 
   console.log(check);
 
-  // if (response.ok) {
-  //   phoneForm.style.display = 'none';
-  //   verifyForm.style.display = 'block';
-  // }
   responseChecker(check);
 });
 
@@ -64,7 +60,6 @@ verifyForm.addEventListener('submit', async (e) => {
     text = check.message;
     responseText.innerHTML = text;
   } else {
-    // verifyForm.style.display = 'none';
     responseText.style.display = 'block';
     text = check.message;
     responseText.innerHTML = text;
@@ -77,13 +72,11 @@ function responseChecker(response) {
 
   switch (statusCode) {
     case 400:
-      // verifyForm.style.display = 'none';
       responseText.style.display = 'block';
       text = response.message;
       responseText.innerHTML = text;
       return;
     case 429:
-      // verifyForm.style.display = 'none';
       responseText.style.display = 'block';
       text = response.message;
       responseText.innerHTML = text;
